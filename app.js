@@ -20,6 +20,9 @@ app.get('*', function(req, res){
 
 	request({url:req.query.url}, function(error, response, body){
 		res.header('Content-Type', 'application/javascript');
+		if (!response.headers['content-type'].match(/json|javascript/)){
+			return res.status(500).send({err:'invalid data', type:response.headers['content-type'], data:body});
+		}
 		res.send(callback+'('+body+');');
 	});
 });
